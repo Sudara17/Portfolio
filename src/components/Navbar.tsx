@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Menu, Moon, Sun, X } from 'lucide-react'
 import { navItems } from '../data/navigation.ts'
 import { profile } from '../data/profile.ts'
+import { RESUME_URL } from '../lib/resume.ts'
 import { useActiveSection } from '../hooks/useActiveSection.ts'
 import { useTheme } from '../hooks/useTheme.ts'
 import { cx } from '../lib/cx.ts'
@@ -110,6 +111,10 @@ export function Navbar() {
         </nav>
 
         <div className="nav-tools">
+          <a className="nav-resume" href={RESUME_URL} target="_blank" rel="noopener noreferrer">
+            Resume
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
           <button
             type="button"
             className="icon-btn"
@@ -144,6 +149,10 @@ export function Navbar() {
             Close menu
           </button>
           <nav aria-label="Mobile">
+            <a className="mobile-link" href={RESUME_URL} target="_blank" rel="noopener noreferrer" onClick={close}>
+              <span>Resume</span>
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
             {navItems.map((item, index) => (
               <a
                 key={item.id}

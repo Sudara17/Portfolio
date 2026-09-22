@@ -2,8 +2,35 @@ import { useMemo, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { skillCategories } from '../data/skills.ts'
 import type { Skill } from '../data/skills.ts'
+import { traceFor } from '../data/traces.ts'
+import { cx } from '../lib/cx.ts'
 import { onTabListKeyDown } from '../lib/tabs.ts'
 import { Section } from './Section.tsx'
+
+function SkillDetail({
+  skill,
+  trace,
+}: {
+  skill: Skill
+  trace: ReturnType<typeof traceFor>
+}) {
+  return (
+    <div className="skill-detail" role="status">
+      {trace ? (
+        <ol className="trace">
+          {trace.steps.map((step, index) => (
+            <li key={`${step.label}-${index}`}>
+              {index > 0 ? <span aria-hidden="true">↓</span> : null}
+              {step.href ? <a href={step.href}>{step.label}</a> : <span>{step.label}</span>}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p>{skill.context ?? `${skill.name} is listed in the portfolio skill set.`}</p>
+      )}
+    </div>
+  )
+}
 
 function matches(skill: Skill, query: string) {
   if (!query) return true
@@ -17,10 +44,15 @@ export function Skills() {
   const active = skillCategories.find((category) => category.id === activeId) ?? skillCategories[0]
   const tabIds = skillCategories.map((category) => `skill-tab-${category.id}`)
 
+  const [pinned, setPinned] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
   const visible = useMemo(
     () => active?.skills.filter((skill) => matches(skill, normalized)) ?? [],
     [active, normalized],
   )
+  const selectedName = pinned ?? hovered
+  const selected = visible.find((skill) => skill.name === selectedName)
+  const trace = selected ? traceFor(selected.name) : undefined
 
   const elsewhere = skillCategories
     .filter((category) => category.id !== active?.id)
@@ -90,19 +122,37 @@ export function Skills() {
             </p>
           </div>
           {visible.length > 0 ? (
-            <ul className="skill-grid" key={`${active.id}-${normalized}`}>
-              {visible.map((skill) => (
-                <li key={skill.name} className="skill-card">
-                  <span className="skill-mark" aria-hidden="true">
-                    {skill.mark}
-                  </span>
-                  <div>
-                    <p className="skill-name">{skill.name}</p>
-                    {skill.context ? <p className="skill-context">{skill.context}</p> : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="skill-grid" key={`${active.id}-${normalized}`}>
+                {visible.map((skill) => {
+                  const connected = Boolean(traceFor(skill.name))
+                  const pressed = pinned === skill.name
+                  return (
+                    <li key={skill.name}>
+                      <button
+                        type="button"
+                        className={cx('skill-card', pressed && 'is-selected')}
+                        aria-pressed={pressed}
+                        onMouseEnter={() => setHovered(skill.name)}
+                        onMouseLeave={() => setHovered(null)}
+                        onFocus={() => setHovered(skill.name)}
+                        onBlur={() => setHovered(null)}
+                        onClick={() => setPinned((current) => (current === skill.name ? null : skill.name))}
+                      >
+                        <span className="skill-mark" aria-hidden="true">
+                          {skill.mark}
+                        </span>
+                        <span>
+                          <span className="skill-name">{skill.name}</span>
+                          {connected ? <span className="skill-trace-label">Trace Skill</span> : null}
+                        </span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+              {selected ? <SkillDetail skill={selected} trace={trace} /> : null}
+            </>
           ) : (
             <div className="empty-state">
               <p>

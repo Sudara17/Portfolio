@@ -1,3 +1,4 @@
+import { SiteProvider } from './context/SiteInteractions.tsx'
 import { About } from './components/About.tsx'
 import { AskSudara } from './components/AskSudara.tsx'
 import { Achievements } from './components/Achievements.tsx'
@@ -13,7 +14,7 @@ import { Skills } from './components/Skills.tsx'
 
 export default function App() {
   return (
-    <>
+    <SiteProvider>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -31,6 +32,6 @@ export default function App() {
       <Footer />
       <BackToTop />
       <AskSudara />
-    </>
+    </SiteProvider>
   )
 }

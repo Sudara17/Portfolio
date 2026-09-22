@@ -61,7 +61,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const record = payload && typeof payload === 'object' ? payload : {}
     const message = 'message' in record ? record.message : undefined
     const conversation = 'conversation' in record ? record.conversation : undefined
-    const result = await answerPortfolioQuestion({ message, conversation })
+    const projectId = 'projectId' in record ? record.projectId : undefined
+    const result = await answerPortfolioQuestion({ message, conversation, projectId })
     send(res, result.status, result.body)
   } catch {
     send(res, 400, { message: 'Enter a message.' })

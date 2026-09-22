@@ -5,6 +5,7 @@ export type ExperienceItem = {
   period: string
   highlights: string[]
   technologies?: string[]
+  workedOn?: string[]
 }
 
 export const experience: ExperienceItem[] = [
@@ -30,6 +31,20 @@ export const experience: ExperienceItem[] = [
       'Robot Framework',
       'OpenSpec',
     ],
+    workedOn: [
+      'Flutter',
+      'Dart',
+      'Riverpod',
+      'Dio',
+      'GoRouter',
+      'AWS Cognito',
+      'REST APIs',
+      'Playwright',
+      'Robot Framework',
+      'OpenSpec',
+      'API testing',
+      'Authentication/mobile workflows',
+    ],
   },
   {
     id: 'justohire',
@@ -52,6 +67,22 @@ export const experience: ExperienceItem[] = [
       'LLM',
       'REST APIs',
     ],
+    workedOn: [
+      'Invoice Management System',
+      'Leave Management System',
+      'Resume Hub / Parser',
+      'Python',
+      'React',
+      'TypeScript',
+      'Supabase',
+      'Vercel',
+      'Render',
+      'REST APIs',
+      'RAG',
+      'LLM integration',
+      'Prompt engineering',
+      'API testing/deployment',
+    ],
   },
   {
     id: 'turing-alignerr',
@@ -61,6 +92,14 @@ export const experience: ExperienceItem[] = [
     highlights: [
       'Evaluated real-time AI agents on complex tool-calling tasks, scoring task completion and factual correctness.',
       'Validated data metrics and code execution integrity, identifying edge cases and factual inconsistencies to improve model reliability.',
+    ],
+    workedOn: [
+      'Real-time AI agent evaluation',
+      'Tool-calling tasks',
+      'Task completion scoring',
+      'Factual correctness',
+      'Data metrics',
+      'Code execution integrity',
     ],
   },
   {
@@ -73,5 +112,12 @@ export const experience: ExperienceItem[] = [
       'Designed RAG-powered chatbot workflows and reusable LangChain modules for contextual resume guidance.',
     ],
     technologies: ['LLM embeddings', 'RAG', 'LangChain'],
+    workedOn: [
+      'Semantic resume parsing',
+      'LLM embeddings',
+      '10+ real-world samples',
+      'RAG-powered chatbot workflows',
+      'LangChain modules',
+    ],
   },
 ]

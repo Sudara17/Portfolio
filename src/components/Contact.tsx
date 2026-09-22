@@ -12,7 +12,7 @@ import {
   type ContactValues,
 } from '../lib/contact.ts'
 import { Button } from './Button.tsx'
-import { ResumeLink, ResumeMissing } from './ResumeActions.tsx'
+import { ResumeLink } from './ResumeActions.tsx'
 import { Section } from './Section.tsx'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
@@ -136,10 +136,10 @@ export function Contact() {
           </dl>
           <h3 className="resume-heading">Resume</h3>
           <div className="resume-inline">
-            <ResumeLink kind="download" variant="secondary" noteId="contact-resume-note" />
-            <ResumeLink kind="open" variant="ghost" noteId="contact-resume-note" />
+            <ResumeLink kind="download" variant="secondary" />
+            <ResumeLink kind="open" variant="ghost" />
+            <ResumeLink kind="view" variant="ghost" />
           </div>
-          <ResumeMissing id="contact-resume-note" />
         </div>
 
         <form className="panel contact-form" noValidate onSubmit={onSubmit} aria-describedby="contact-fallback" aria-busy={status === 'submitting'}>

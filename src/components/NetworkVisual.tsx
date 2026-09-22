@@ -206,8 +206,13 @@ export function NetworkVisual() {
       <canvas
         ref={canvasRef}
         role="img"
-        aria-label="Decorative network of connected nodes. With a mouse, moving the pointer gently attracts nearby nodes."
+        aria-label="Decorative network linking AI, RAG, LLM, APIs, Flutter, React, and testing. With a mouse, moving the pointer gently attracts nearby nodes."
       />
+      <ul className="viz-concepts" aria-label="Technical themes">
+        {['AI', 'RAG', 'LLM', 'APIs', 'Flutter', 'React', 'Testing'].map((label) => (
+          <li key={label}>{label}</li>
+        ))}
+      </ul>
     </div>
   )
 }
