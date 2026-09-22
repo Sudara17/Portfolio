@@ -19,17 +19,9 @@ npm run build
 npm run preview
 ```
 
-## Resume PDF
+## Resume
 
-The repository does not include a resume file. To enable download and open:
-
-1. Save the PDF as `public/resume.pdf`.
-2. Restart the dev server, or rebuild for production.
-
-The dev server and the production build check that `public/resume.pdf` starts with a PDF signature. Until that file is a real PDF, Download Resume and Open Resume explain where to put it instead of linking to a missing file. Restart the dev server or rebuild after adding it.
-
-- Download saves `Sudara-T-S-M-Resume.pdf`.
-- Open Resume opens `/resume.pdf` in a new tab.
+Every resume action opens the same Google Drive file in a new tab. The address lives in `RESUME_URL` inside `src/lib/resume.ts`. The site does not host or proxy the PDF.
 
 ## Profile links
 
@@ -79,19 +71,9 @@ Import the repository. Use the Vite preset:
 - Build command: `npm run build`
 - Output directory: `dist`
 
-Add `public/resume.pdf` before building if the resume should be downloadable.
+Ask Sudara AI calls Groq from the serverless function at `POST /api/chat`. The function reads `process.env.GROQ_API_KEY` on the server. The key is not part of the client bundle.
 
-Ask Sudara AI calls Groq from a serverless function at `POST /api/chat`. The browser never receives the API key.
-
-In Vercel, open **Project → Settings → Environment Variables** and add:
-
-| Name | Value |
-| --- | --- |
-| `GROQ_API_KEY` | Your Groq secret key |
-
-Do not prefix the name with `VITE_`. Apply it to Production, Preview, and Development, then redeploy.
-
-For local `npm run dev`, copy `.env.example` to `.env.local` and set the same variable. `.env.local` is gitignored. Never commit the real key.
+Production already uses the Vercel environment variable. Local `npm run dev` can read the same name from an uncommitted `.env.local`. Never commit the real key.
 
 GitHub Pages only serves the static site, so the chatbot needs the Vercel function. On a static host the assistant shows its unavailable message.
 

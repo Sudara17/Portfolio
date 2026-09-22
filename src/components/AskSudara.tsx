@@ -1,23 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent } from 'react'
 import { MessageCircle, Send, X } from 'lucide-react'
-
-const UNAVAILABLE =
-  "Sudara AI is temporarily unavailable. You can explore the portfolio sections below or contact Sudara directly."
+import { useSite } from '../context/SiteInteractions.tsx'
+import { assistantOpening, assistantUnavailable } from '../data/portfolio.ts'
 
 const SECTIONS = new Set(['about', 'experience', 'projects', 'skills', 'achievements', 'contact'])
 const MAX_MESSAGE = 1000
-
-const SUGGESTIONS = [
-  'What did Sudara do at SivionX?',
-  'What projects use RAG?',
-  'Tell me about the AI Resume Assistant.',
-  'What technologies does Sudara use?',
-  'What did she build at JustoHire?',
-  'Show me her AI projects.',
-  'What is her research work?',
-  'What testing experience does she have?',
-]
 
 type Source = {
   section: string
@@ -34,8 +22,7 @@ type ChatMessage = {
 const OPENING: ChatMessage = {
   id: 'opening',
   role: 'assistant',
-  content:
-    "Hi! I'm Sudara AI ✦\n\nAsk me about Sudara's projects, experience, AI/LLM work, technical skills, or research.",
+  content: assistantOpening,
 }
 
 function readSource(value: unknown): Source | undefined {
@@ -48,32 +35,32 @@ function readSource(value: unknown): Source | undefined {
 }
 
 export function AskSudara() {
+  const { chatOpen, launch, openChat, closeChat } = useSite()
   const titleId = useId()
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
-  const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState('')
   const [pending, setPending] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([OPENING])
 
   useEffect(() => {
-    if (!open) return
+    if (!chatOpen) return
     inputRef.current?.focus()
     const onKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
+      if (event.key === 'Escape') closeChat()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [open])
+  }, [chatOpen, closeChat])
 
   useEffect(() => {
     const list = listRef.current
     if (!list) return
     list.scrollTop = list.scrollHeight
-  }, [messages, pending, open])
+  }, [messages, pending, chatOpen])
 
   function goToSource(section: string) {
-    setOpen(false)
+    closeChat()
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     document.getElementById(section)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
   }
@@ -97,13 +84,17 @@ export function AskSudara() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, conversation: history }),
+        body: JSON.stringify({
+          message,
+          conversation: history,
+          ...(launch.projectId ? { projectId: launch.projectId } : {}),
+        }),
       })
       const payload: unknown = await response.json().catch(() => null)
       const reply =
         payload && typeof payload === 'object' && 'message' in payload && typeof payload.message === 'string'
           ? payload.message
-          : UNAVAILABLE
+          : assistantUnavailable
       const source =
         response.ok && payload && typeof payload === 'object' && 'source' in payload
           ? readSource(payload.source)
@@ -115,7 +106,7 @@ export function AskSudara() {
     } catch {
       setMessages((current) => [
         ...current,
-        { id: `assistant-${Date.now()}`, role: 'assistant', content: UNAVAILABLE },
+        { id: `assistant-${Date.now()}`, role: 'assistant', content: assistantUnavailable },
       ])
     } finally {
       setPending(false)
@@ -134,18 +125,22 @@ export function AskSudara() {
     }
   }
 
-  const showSuggestions = messages.every((item) => item.role === 'assistant' && item.id === 'opening')
+  const showSuggestions = Boolean(launch.projectId) || messages.every((item) => item.id === 'opening')
 
   return (
     <div className="ask-sudara">
-      {open ? (
+      {chatOpen ? (
         <section className="ask-panel" role="dialog" aria-modal="true" aria-labelledby={titleId}>
           <header className="ask-head">
             <div>
-              <p className="kicker">Portfolio assistant</p>
+              <p className="kicker">
+                <span className="ai-status" aria-hidden="true" />
+                Portfolio AI
+              </p>
               <h2 id={titleId}>Sudara AI</h2>
+              {launch.projectName ? <p className="ask-context">Ask This Project · {launch.projectName}</p> : null}
             </div>
-            <button type="button" className="icon-btn" onClick={() => setOpen(false)} aria-label="Close Sudara AI">
+            <button type="button" className="icon-btn" onClick={closeChat} aria-label="Close Sudara AI">
               <X aria-hidden="true" />
             </button>
           </header>
@@ -161,11 +156,20 @@ export function AskSudara() {
                 ) : null}
               </article>
             ))}
-            {pending ? <p className="ask-pending">Thinking…</p> : null}
+            {pending ? (
+              <p className="ask-pending" role="status">
+                <span className="typing" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                Thinking
+              </p>
+            ) : null}
           </div>
           {showSuggestions ? (
             <div className="ask-suggestions">
-              {SUGGESTIONS.map((prompt) => (
+              {launch.prompts.map((prompt) => (
                 <button key={prompt} type="button" onClick={() => void send(prompt)} disabled={pending}>
                   {prompt}
                 </button>
@@ -182,7 +186,7 @@ export function AskSudara() {
               rows={2}
               maxLength={MAX_MESSAGE}
               value={draft}
-              placeholder="Ask about projects, experience, or skills"
+              placeholder={launch.projectName ? `Ask about ${launch.projectName}` : 'Ask about projects, experience, or skills'}
               onChange={(event) => setDraft(event.target.value)}
               onKeyDown={onKeyDown}
               disabled={pending}
@@ -197,8 +201,8 @@ export function AskSudara() {
       <button
         type="button"
         className="ask-launcher"
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
+        aria-expanded={chatOpen}
+        onClick={() => (chatOpen ? closeChat() : openChat())}
       >
         <MessageCircle aria-hidden="true" />
         Ask Sudara AI

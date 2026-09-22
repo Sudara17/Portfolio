@@ -1,5 +1,2 @@
-import { resumeIsAvailable } from 'virtual:resume-available'
-
-export const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`
-export const resumeDownloadName = 'Sudara-T-S-M-Resume.pdf'
-export const resumeFileReady = resumeIsAvailable
+export const RESUME_URL =
+  'https://drive.google.com/file/d/1CbbZWQ3i9J_x5mPr9BSp2nzTGzQvYDuq/view?usp=drive_link'

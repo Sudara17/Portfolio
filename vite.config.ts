@@ -1,52 +1,6 @@
-import { closeSync, existsSync, openSync, readSync } from 'node:fs'
-import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import chatHandler from './api/chat.ts'
-
-const resumeVirtualId = 'virtual:resume-available'
-const resolvedResumeId = `\0${resumeVirtualId}`
-
-function resumeFileReady() {
-  const pdfPath = resolve(process.cwd(), 'public/resume.pdf')
-  if (!existsSync(pdfPath)) return false
-  try {
-    const file = openSync(pdfPath, 'r')
-    const buffer = Buffer.alloc(5)
-    readSync(file, buffer, 0, 5, 0)
-    closeSync(file)
-    return buffer.toString('utf8').startsWith('%PDF')
-  } catch {
-    return false
-  }
-}
-
-function resumeAvailabilityPlugin(): Plugin {
-  return {
-    name: 'resume-availability',
-    resolveId(id) {
-      if (id === resumeVirtualId) return resolvedResumeId
-    },
-    load(id) {
-      if (id !== resolvedResumeId) return
-      return `export const resumeIsAvailable = ${resumeFileReady()}`
-    },
-    configureServer(server) {
-      const reload = (changed: string) => {
-        if (!changed.endsWith(`${resolve('public')}/resume.pdf`) && !changed.endsWith('public/resume.pdf')) {
-          return
-        }
-        const module = server.moduleGraph.getModuleById(resolvedResumeId)
-        if (!module) return
-        server.moduleGraph.invalidateModule(module)
-        server.ws.send({ type: 'full-reload' })
-      }
-      server.watcher.on('add', reload)
-      server.watcher.on('change', reload)
-      server.watcher.on('unlink', reload)
-    },
-  }
-}
 
 function chatDevPlugin(): Plugin {
   return {
@@ -66,7 +20,7 @@ function chatDevPlugin(): Plugin {
           if (!res.headersSent) {
             res.statusCode = 503
             res.setHeader('Content-Type', 'application/json; charset=utf-8')
-            res.end(JSON.stringify({ message: 'Sudara AI is temporarily unavailable. You can explore the portfolio sections below or contact Sudara directly.' }))
+            res.end(JSON.stringify({ message: "Sorry, I couldn't reach the AI assistant right now. You can still explore my projects below." }))
           }
         })
       })
@@ -83,6 +37,6 @@ function resolveBase() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), resumeAvailabilityPlugin(), chatDevPlugin()],
+  plugins: [react(), chatDevPlugin()],
   base: resolveBase(),
 })
