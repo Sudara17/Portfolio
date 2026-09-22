@@ -2,7 +2,9 @@ import { useMemo, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { skillCategories } from '../data/skills.ts'
 import type { Skill } from '../data/skills.ts'
+import { systemModules } from '../data/os.ts'
 import { traceFor } from '../data/traces.ts'
+import { useSite } from '../context/SiteInteractions.tsx'
 import { cx } from '../lib/cx.ts'
 import { onTabListKeyDown } from '../lib/tabs.ts'
 import { Section } from './Section.tsx'
@@ -38,11 +40,15 @@ function matches(skill: Skill, query: string) {
 }
 
 export function Skills() {
+  const { systemFocus } = useSite()
   const [activeId, setActiveId] = useState(skillCategories[0]?.id ?? 'ai')
   const [query, setQuery] = useState('')
   const normalized = query.trim().toLowerCase()
   const active = skillCategories.find((category) => category.id === activeId) ?? skillCategories[0]
   const tabIds = skillCategories.map((category) => `skill-tab-${category.id}`)
+  const focusSkills = systemFocus
+    ? new Set(systemModules.find((module) => module.id === systemFocus)?.skillNames ?? [])
+    : null
 
   const [pinned, setPinned] = useState<string | null>(null)
   const [hovered, setHovered] = useState<string | null>(null)
@@ -68,7 +74,7 @@ export function Skills() {
   return (
     <Section
       id="skills"
-      index="04"
+      index="05"
       title="Skills"
       intro="Grouped from coursework, roles, and projects. Notes appear only where a technology is tied to specific work."
       band
@@ -131,7 +137,11 @@ export function Skills() {
                     <li key={skill.name}>
                       <button
                         type="button"
-                        className={cx('skill-card', pressed && 'is-selected')}
+                        className={cx(
+                          'skill-card',
+                          pressed && 'is-selected',
+                          focusSkills && focusSkills.size > 0 && !focusSkills.has(skill.name) && 'is-dimmed',
+                        )}
                         aria-pressed={pressed}
                         onMouseEnter={() => setHovered(skill.name)}
                         onMouseLeave={() => setHovered(null)}

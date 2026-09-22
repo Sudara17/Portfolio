@@ -95,7 +95,7 @@ export function Contact() {
   return (
     <Section
       id="contact"
-      index="06"
+      index="10"
       title="Contact"
       intro="Email, phone, and professional profiles."
     >

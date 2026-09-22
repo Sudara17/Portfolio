@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { projectFilters, projects, type ProjectFilter } from '../data/projects.ts'
+import { systemModules } from '../data/os.ts'
+import { useSite } from '../context/SiteInteractions.tsx'
 import { onTabListKeyDown } from '../lib/tabs.ts'
+import { cx } from '../lib/cx.ts'
 import { ProjectCard } from './ProjectCard.tsx'
 import { Section } from './Section.tsx'
 
@@ -9,7 +12,11 @@ function filterId(filter: ProjectFilter) {
 }
 
 export function Projects() {
+  const { systemFocus } = useSite()
   const [filter, setFilter] = useState<ProjectFilter>('All')
+  const focusIds = systemFocus
+    ? new Set(systemModules.find((module) => module.id === systemFocus)?.projectIds ?? [])
+    : null
   const visible = projects
     .map((project, index) => ({ project, number: index + 1 }))
     .filter((item) => filter === 'All' || item.project.category === filter)
@@ -17,6 +24,11 @@ export function Projects() {
 
   return (
     <Section id="projects" index="03" title="Projects">
+      {systemFocus ? (
+        <p className="focus-banner" role="status">
+          System focus · {systemModules.find((module) => module.id === systemFocus)?.label}
+        </p>
+      ) : null}
       <div className="toolbar">
         <div className="segment" role="tablist" aria-label="Project categories">
           {projectFilters.map((item, index) => {
@@ -50,7 +62,12 @@ export function Projects() {
       <div id="project-panel" role="tabpanel" aria-labelledby={filterId(filter)} className="project-grid" key={filter}>
         {visible.length > 0 ? (
           visible.map(({ project, number }) => (
-            <ProjectCard key={project.id} project={project} number={number} />
+            <div
+              key={project.id}
+              className={cx(focusIds && focusIds.size > 0 && !focusIds.has(project.id) && 'is-dimmed')}
+            >
+              <ProjectCard project={project} number={number} />
+            </div>
           ))
         ) : (
           <p className="empty-state">No projects in this category.</p>

@@ -303,10 +303,10 @@ h4 {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 0.35rem 0.55rem;
+  padding: 0.35rem 0.45rem;
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
   white-space: nowrap;
 }
 
@@ -2074,6 +2074,374 @@ button.skill-card {
 
   .ask-panel {
     max-height: min(68dvh, 560px);
+  }
+}
+
+.os-tagline {
+  margin: 0.15rem 0 0.55rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.module-label {
+  margin: 0 0 0.25rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.os-dashboard {
+  padding: 0 0 1.5rem;
+}
+
+.os-shell {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, var(--accent-dim)), var(--surface));
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.os-shell-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.os-kicker {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+.os-shell-head h2 {
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.os-sub {
+  color: var(--muted);
+  max-width: 42rem;
+}
+
+.os-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.os-status,
+.os-identity {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.os-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent);
+  animation: ai-pulse 2.4s ease-out infinite;
+}
+
+.os-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.os-label {
+  margin-bottom: 0.45rem;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.os-systems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.os-chip {
+  min-height: 38px;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.os-chip.is-active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.os-active-detail {
+  margin-top: 0.7rem;
+  color: var(--muted);
+}
+
+.text-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.os-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.os-stats div {
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.os-stats dt {
+  color: var(--faint);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.os-stats dd {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+}
+
+.os-clear {
+  margin-top: 0.85rem;
+}
+
+.focus-banner {
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius: 12px;
+  background: var(--accent-dim);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.is-dimmed {
+  opacity: 0.38;
+  transition: opacity 160ms ease;
+}
+
+.decision-groups,
+.lab-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.decision-group,
+.lesson-card,
+.lab-block,
+.bug-card,
+.challenge-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1rem;
+}
+
+.decision-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.decision-trigger {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  min-height: 48px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: left;
+}
+
+.decision-trigger span {
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.decision-trigger.is-open {
+  border-color: var(--accent);
+}
+
+.decision-panel,
+.bug-reveal {
+  margin-top: 0.55rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.decision-panel p,
+.lesson-card p {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.55rem;
+}
+
+.decision-panel strong,
+.lesson-card strong,
+.bug-reveal strong {
+  color: var(--accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lesson-grid,
+.bug-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.journey {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.journey-layer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.journey-arrow {
+  color: var(--faint);
+  padding-left: 0.35rem;
+}
+
+.journey-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.journey-node {
+  min-height: 40px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.journey-node.is-active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.journey-detail {
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.journey-detail strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+}
+
+.bug-code {
+  margin: 0.55rem 0;
+  padding: 0.75rem;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+}
+
+.bug-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bug-options button {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  text-align: left;
+}
+
+.bug-options button.is-selected {
+  border-color: var(--accent);
+}
+
+.bug-options button.is-correct {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.bug-options button.is-wrong {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--line));
+  background: var(--danger-dim);
+}
+
+@media (min-width: 800px) {
+  .os-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+    align-items: start;
+  }
+
+  .lesson-grid,
+  .bug-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

@@ -1,18 +1,30 @@
 import { useState } from 'react'
 import { experience } from '../data/experience.ts'
+import { systemModules } from '../data/os.ts'
+import { useSite } from '../context/SiteInteractions.tsx'
+import { cx } from '../lib/cx.ts'
 import { Section } from './Section.tsx'
 
 export function Experience() {
+  const { systemFocus } = useSite()
   const [openId, setOpenId] = useState<string | null>(experience[0]?.id ?? null)
+  const focusIds = systemFocus
+    ? new Set(systemModules.find((module) => module.id === systemFocus)?.experienceIds ?? [])
+    : null
 
   return (
     <Section id="experience" index="02" title="Experience" band>
+      {systemFocus ? (
+        <p className="focus-banner" role="status">
+          System focus · {systemModules.find((module) => module.id === systemFocus)?.label}
+        </p>
+      ) : null}
       <ol className="timeline">
         {experience.map((item) => {
           const open = openId === item.id
           const panelId = `${item.id}-work`
           return (
-            <li key={item.id}>
+            <li key={item.id} className={cx(focusIds && focusIds.size > 0 && !focusIds.has(item.id) && 'is-dimmed')}>
               <article className="job">
                 <div className="job-top">
                   <div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { moduleLabels } from '../data/navigation.ts'
 import { useInView } from '../hooks/useInView.ts'
 import { cx } from '../lib/cx.ts'
 
@@ -13,6 +14,7 @@ type Props = {
 
 export function Section({ id, index, title, intro, band = false, children }: Props) {
   const { ref, inView } = useInView<HTMLElement>()
+  const moduleLabel = moduleLabels[id]
 
   return (
     <section
@@ -27,6 +29,7 @@ export function Section({ id, index, title, intro, band = false, children }: Pro
             {index}
           </span>
           <div>
+            {moduleLabel ? <p className="module-label">{moduleLabel}</p> : null}
             <h2 id={`${id}-title`}>{title}</h2>
             {intro ? <p className="section-intro">{intro}</p> : null}
           </div>
