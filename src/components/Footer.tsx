@@ -12,7 +12,7 @@ export function Footer() {
           <p className="footer-name">{profile.name}</p>
           <p className="footer-role">{profile.identity}</p>
           <p className="footer-note">Built with modern web technologies.</p>
-          <p className="footer-stack">React, TypeScript, and Vite.</p>
+          <p className="footer-stack">React, TypeScript, Vite, and Groq.</p>
         </div>
         <div>
           <p className="footer-label">Quick links</p>

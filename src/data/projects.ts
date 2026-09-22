@@ -49,6 +49,7 @@ export const projects: Project[] = [
       'Validation',
       'Historical invoice snapshots',
     ],
+    links: [{ label: 'Live demo', href: 'https://invoice-management-system-rho.vercel.app/' }],
   },
   {
     id: 'leave-management',
@@ -117,5 +118,6 @@ export const projects: Project[] = [
       detail:
         'Implemented FAISS vector search, reducing retrieval time by 12%, validated on 10+ resume samples.',
     },
+    links: [{ label: 'Resume Hub', href: 'https://resume-hub-theta.vercel.app/' }],
   },
 ]
