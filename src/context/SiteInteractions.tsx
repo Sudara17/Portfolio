@@ -1,8 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { assistantPrompts } from '../data/portfolio.ts'
-
-export type Audience = 'recruiter' | 'developer' | 'aiml'
 
 export type ChatLaunch = {
   projectId?: string
@@ -11,8 +9,6 @@ export type ChatLaunch = {
 }
 
 type SiteContextValue = {
-  audience: Audience
-  setAudience: (audience: Audience) => void
   chatOpen: boolean
   launch: ChatLaunch
   openChat: (next?: Partial<ChatLaunch>) => void
@@ -23,29 +19,12 @@ const defaultLaunch: ChatLaunch = { prompts: assistantPrompts }
 
 const SiteContext = createContext<SiteContextValue | null>(null)
 
-const focusIds: Record<Audience, readonly string[]> = {
-  recruiter: ['experience', 'projects', 'achievements', 'contact'],
-  developer: ['projects', 'skills'],
-  aiml: ['projects', 'skills', 'achievements'],
-}
-
-export function sectionIsFocused(id: string, audience: Audience) {
-  return focusIds[audience].includes(id)
-}
-
 export function SiteProvider({ children }: { children: ReactNode }) {
-  const [audience, setAudience] = useState<Audience>('recruiter')
   const [chatOpen, setChatOpen] = useState(false)
   const [launch, setLaunch] = useState<ChatLaunch>(defaultLaunch)
 
-  useEffect(() => {
-    document.documentElement.dataset.audience = audience
-  }, [audience])
-
   const value = useMemo<SiteContextValue>(
     () => ({
-      audience,
-      setAudience,
       chatOpen,
       launch,
       openChat(next) {
@@ -60,7 +39,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
         setChatOpen(false)
       },
     }),
-    [audience, chatOpen, launch],
+    [chatOpen, launch],
   )
 
   return <SiteContext.Provider value={value}>{children}</SiteContext.Provider>

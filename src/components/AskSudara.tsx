@@ -163,7 +163,7 @@ export function AskSudara() {
                   <span />
                   <span />
                 </span>
-                Thinking
+                Sudara AI is thinking...
               </p>
             ) : null}
           </div>
