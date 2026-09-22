@@ -52,7 +52,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   if (isRateLimited(clientIp(req))) {
-    send(res, 429, { message: UNAVAILABLE })
+    console.error('CHAT_ERROR: category=rate status=429')
+    send(res, 429, { message: UNAVAILABLE, code: 'rate' })
     return
   }
 

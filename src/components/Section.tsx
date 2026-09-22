@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { sectionIsFocused, useSite } from '../context/SiteInteractions.tsx'
 import { useInView } from '../hooks/useInView.ts'
 import { cx } from '../lib/cx.ts'
 
@@ -14,14 +13,12 @@ type Props = {
 
 export function Section({ id, index, title, intro, band = false, children }: Props) {
   const { ref, inView } = useInView<HTMLElement>()
-  const { audience } = useSite()
-  const focused = sectionIsFocused(id, audience)
 
   return (
     <section
       id={id}
       ref={ref}
-      className={cx('section', band && 'section-band', 'reveal', inView && 'is-in', focused && 'is-focused')}
+      className={cx('section', band && 'section-band', 'reveal', inView && 'is-in')}
       aria-labelledby={`${id}-title`}
     >
       <div className="container">
@@ -30,7 +27,6 @@ export function Section({ id, index, title, intro, band = false, children }: Pro
             {index}
           </span>
           <div>
-            {focused ? <p className="focus-flag">In focus</p> : null}
             <h2 id={`${id}-title`}>{title}</h2>
             {intro ? <p className="section-intro">{intro}</p> : null}
           </div>
