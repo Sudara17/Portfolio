@@ -1,7 +1,8 @@
 import { closeSync, existsSync, openSync, readSync } from 'node:fs'
 import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
+import chatHandler from './api/chat.ts'
 
 const resumeVirtualId = 'virtual:resume-available'
 const resolvedResumeId = `\0${resumeVirtualId}`
@@ -47,6 +48,32 @@ function resumeAvailabilityPlugin(): Plugin {
   }
 }
 
+function chatDevPlugin(): Plugin {
+  return {
+    name: 'portfolio-chat-dev',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const path = req.url?.split('?')[0]
+        if (path !== '/api/chat') {
+          next()
+          return
+        }
+        const env = loadEnv(server.config.mode, process.cwd(), '')
+        if (!process.env.GROQ_API_KEY && env.GROQ_API_KEY) {
+          process.env.GROQ_API_KEY = env.GROQ_API_KEY
+        }
+        void chatHandler(req, res).catch(() => {
+          if (!res.headersSent) {
+            res.statusCode = 503
+            res.setHeader('Content-Type', 'application/json; charset=utf-8')
+            res.end(JSON.stringify({ message: 'Sudara AI is temporarily unavailable. You can explore the portfolio sections below or contact Sudara directly.' }))
+          }
+        })
+      })
+    },
+  }
+}
+
 function resolveBase() {
   const raw = process.env.BASE_PATH ?? '/'
   if (raw === '/' || raw === '') return '/'
@@ -56,6 +83,6 @@ function resolveBase() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), resumeAvailabilityPlugin()],
+  plugins: [react(), resumeAvailabilityPlugin(), chatDevPlugin()],
   base: resolveBase(),
 })

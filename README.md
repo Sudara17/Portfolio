@@ -39,7 +39,12 @@ GitHub and LinkedIn use the public profile URLs for the handles on the resume:
 - LinkedIn: https://www.linkedin.com/in/sudara17
 - Email: sudharshinisudara@gmail.com
 
-Change `src/data/profile.ts` if a public URL is different. Project demo and source links are omitted because none were provided. A project in `src/data/projects.ts` can include an optional `links` array later:
+Change `src/data/profile.ts` if a public URL is different. Live project links that were provided are on the matching cards:
+
+- Invoice Management System: https://invoice-management-system-rho.vercel.app/
+- Resume Hub: https://resume-hub-theta.vercel.app/
+
+Other projects do not show a demo button because no URL was provided. A project in `src/data/projects.ts` can include an optional `links` array later:
 
 ```ts
 links: [{ label: 'GitHub', href: 'https://github.com/...' }]
@@ -74,7 +79,21 @@ Import the repository. Use the Vite preset:
 - Build command: `npm run build`
 - Output directory: `dist`
 
-No environment variables are required. Add `public/resume.pdf` before building if the resume should be downloadable.
+Add `public/resume.pdf` before building if the resume should be downloadable.
+
+Ask Sudara AI calls Groq from a serverless function at `POST /api/chat`. The browser never receives the API key.
+
+In Vercel, open **Project → Settings → Environment Variables** and add:
+
+| Name | Value |
+| --- | --- |
+| `GROQ_API_KEY` | Your Groq secret key |
+
+Do not prefix the name with `VITE_`. Apply it to Production, Preview, and Development, then redeploy.
+
+For local `npm run dev`, copy `.env.example` to `.env.local` and set the same variable. `.env.local` is gitignored. Never commit the real key.
+
+GitHub Pages only serves the static site, so the chatbot needs the Vercel function. On a static host the assistant shows its unavailable message.
 
 ### GitHub Pages
 

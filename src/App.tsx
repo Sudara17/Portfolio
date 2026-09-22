@@ -1,4 +1,5 @@
 import { About } from './components/About.tsx'
+import { AskSudara } from './components/AskSudara.tsx'
 import { Achievements } from './components/Achievements.tsx'
 import { BackToTop } from './components/BackToTop.tsx'
 import { Contact } from './components/Contact.tsx'
@@ -29,6 +30,7 @@ export default function App() {
       </main>
       <Footer />
       <BackToTop />
+      <AskSudara />
     </>
   )
 }
