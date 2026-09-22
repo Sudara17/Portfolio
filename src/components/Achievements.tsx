@@ -6,7 +6,7 @@ export function Achievements() {
   const rest = achievements.filter((item) => !item.featured)
 
   return (
-    <Section id="achievements" index="05" title="Achievements">
+    <Section id="achievements" index="06" title="Achievements">
       {featured ? (
         <article className="award-feature">
           <div className="award-mark">

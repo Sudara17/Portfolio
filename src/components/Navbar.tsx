@@ -94,7 +94,7 @@ export function Navbar() {
           </span>
           <span className="brand-text">
             <span className="brand-name">{profile.shortName}</span>
-            <span className="brand-role">{profile.identity}</span>
+            <span className="brand-role">OS · {profile.identity}</span>
           </span>
         </a>
 

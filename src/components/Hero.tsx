@@ -10,7 +10,8 @@ export function Hero() {
       <div className="container hero-grid">
         <div className="hero-copy">
           <p className="hero-name">{profile.name}</p>
-          <p className="kicker">{profile.identity}</p>
+          <p className="kicker">SUDARA OS · {profile.identity}</p>
+          <p className="os-tagline">AI Developer Operating System</p>
           <h1 id="home-title">{profile.headline}</h1>
           <p className="lede">{profile.lede}</p>
           <div className="hero-cta">
